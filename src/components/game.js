@@ -5,13 +5,41 @@ import GuessSection from './guess-section';
 import GuessCount  from './guess-count';
 import GuessList from './guess-list';
 
+const feedback = (solution, guess) => {
+    const difference = Math.abs(solution - guess);
+
+    if (difference === 0) {
+        return 'You win!!!';
+    }
+    else if (difference < 5) {
+        return 'Fuego!!';
+    }
+    else if (difference < 10) {
+        return 'Hotter';
+    }
+    else if (difference < 20) {
+        return 'Hot';
+    }
+    else if (difference < 30) {
+        return 'Cold'
+    }
+    else if (difference < 40) {
+        return 'Colder'
+    }
+    else {
+        return 'Freezing!';
+    }
+
+}
+
+
 class Game extends Component {
     constructor(props) {
         super(props);
         this.state = {
             count: 0,
             currentGuess: '',
-            recentGuesses: [2, 9, 67], // make dynamic
+            recentGuesses: [], // make dynamic
             currentFeedback: 'Make a Guess!',
             solution: Math.floor(Math.random()*100)+1
         }
@@ -23,7 +51,7 @@ class Game extends Component {
         this.setState({
             solution: Math.floor(Math.random()*100)+1,
             count: 0,
-            recentGuesses: [2, 9, 67], // make dynamic
+            recentGuesses: [], // make dynamic
             currentFeedback: 'Make a Guess!'
         })
     }
@@ -33,10 +61,8 @@ class Game extends Component {
     handleFormSubmit(){
         this.setState({
             count: this.state.count + 1, 
+            currentFeedback: feedback(this.state.currentGuess, this.state.solution)
         })
-        this.handleHotFeedback()
-        this.handleHotterFeedback()
-        this.handleFuegoFeedback()
     };
 
     handleRecentGuesses(){
@@ -51,52 +77,6 @@ class Game extends Component {
             currentGuess: e
         })
     }
-
-    handleHotFeedback(){
-        const differenceGreater = this.state.currentGuess >= (this.state.solution + 20);
-        const differenceLess = this.state.currentGuess <= (this.state.solution - 20);
-        console.log(differenceGreater, differenceLess);
-        if (differenceGreater || differenceLess) {
-            this.setState({
-                currentFeedback: 'Hot'
-            }) 
-        } 
-    }
-
-    handleHotterFeedback(){
-        // const difference = this.state.currentGuess - this.state.solution;
-        const differenceGreater = this.state.currentGuess >= (this.state.solution + 10);
-        const differenceLess = this.state.currentGuess <= (this.state.solution - 10);
-        console.log(differenceGreater, differenceLess);
-        if (differenceGreater || differenceLess) {
-            this.setState({
-                currentFeedback: 'Hotter'
-            }) 
-        } 
-    }
-
-    handleFuegoFeedback(){
-        const differenceGreater = this.state.currentGuess >= (this.state.solution + 5) && 
-        this.state.currentGuess <= (this.state.solution + 10) ;
-        const differenceLess = this.state.currentGuess <= (this.state.solution - 5);
-        console.log(differenceGreater, differenceLess);
-        if (differenceGreater || differenceLess) {
-            this.setState({
-                currentFeedback: 'Fuego!!!!'
-            }) 
-        } 
-       
-    }
-
-
-    // const differenceGreater = this.state.currentGuess >= (this.state.solution + 10)
-    // const differenceLess = this.state.currentGuess <= (this.state.solution - 10)
-
-    // if (this.state.currentGuess - this.state.solution > 10) {
-    //     this.setState({
-    //         feedback: 'cold'
-    //     }) 
-    // }  
     
     render() {
         return (
