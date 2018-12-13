@@ -11,22 +11,21 @@ class Game extends Component {
         this.state = {
             count: 0,
             currentGuess: '',
-            recentGuesses: [2, 9, 67],
-            currentFeedback: 'hot',
-            solution: ''
+            recentGuesses: [2, 9, 67], // make dynamic
+            currentFeedback: 'Make a Guess!',
+            solution: Math.floor(Math.random()*100)+1
         }
     }
 
-    currentSolution(){
-
-    console.log('current solution is working')
-    const number = Math.floor(Math.random()*100)+1
-
-    if (this.state.solution === '') {
+    // Start new game/ reset 
+    handleNewGameClick(){
+        
         this.setState({
-            solution: number
+            solution: Math.floor(Math.random()*100)+1,
+            count: 0,
+            recentGuesses: [2, 9, 67], // make dynamic
+            currentFeedback: 'Make a Guess!'
         })
-    }
     }
 
 
@@ -34,8 +33,10 @@ class Game extends Component {
     handleFormSubmit(){
         this.setState({
             count: this.state.count + 1, 
-            currentFeedback: 'cold',
         })
+        this.handleHotFeedback()
+        this.handleHotterFeedback()
+        this.handleFuegoFeedback()
     };
 
     handleRecentGuesses(){
@@ -51,14 +52,56 @@ class Game extends Component {
         })
     }
 
-    // handleFeedback(){
-        
-    // }
+    handleHotFeedback(){
+        const differenceGreater = this.state.currentGuess >= (this.state.solution + 20);
+        const differenceLess = this.state.currentGuess <= (this.state.solution - 20);
+        console.log(differenceGreater, differenceLess);
+        if (differenceGreater || differenceLess) {
+            this.setState({
+                currentFeedback: 'Hot'
+            }) 
+        } 
+    }
+
+    handleHotterFeedback(){
+        // const difference = this.state.currentGuess - this.state.solution;
+        const differenceGreater = this.state.currentGuess >= (this.state.solution + 10);
+        const differenceLess = this.state.currentGuess <= (this.state.solution - 10);
+        console.log(differenceGreater, differenceLess);
+        if (differenceGreater || differenceLess) {
+            this.setState({
+                currentFeedback: 'Hotter'
+            }) 
+        } 
+    }
+
+    handleFuegoFeedback(){
+        const differenceGreater = this.state.currentGuess >= (this.state.solution + 5) && 
+        this.state.currentGuess <= (this.state.solution + 10) ;
+        const differenceLess = this.state.currentGuess <= (this.state.solution - 5);
+        console.log(differenceGreater, differenceLess);
+        if (differenceGreater || differenceLess) {
+            this.setState({
+                currentFeedback: 'Fuego!!!!'
+            }) 
+        } 
+       
+    }
+
+
+    // const differenceGreater = this.state.currentGuess >= (this.state.solution + 10)
+    // const differenceLess = this.state.currentGuess <= (this.state.solution - 10)
+
+    // if (this.state.currentGuess - this.state.solution > 10) {
+    //     this.setState({
+    //         feedback: 'cold'
+    //     }) 
+    // }  
     
     render() {
         return (
             <div>
-                <Header newGame={(e) => this.currentSolution(e)}/>
+                <Header newGame={(e) => this.handleNewGameClick(e)}/>
                 <GuessSection 
                     feedback={this.state.currentFeedback} 
                     formSubmit={(e) => this.handleFormSubmit(e)}
