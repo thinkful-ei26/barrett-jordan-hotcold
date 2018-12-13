@@ -11,6 +11,7 @@ export default function GuessSection(props) {
             <GuessForm 
                 guessInput={(e) => props.guessInput(e)}
                 formSubmit={(e) => props.formSubmit(e)}
+                history={(e) => props.history(e)}
             />
         </section>
     );

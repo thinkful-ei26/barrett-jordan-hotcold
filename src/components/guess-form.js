@@ -7,7 +7,8 @@ export default function GuessForm(props) {
     return (
         <form onSubmit={(e) =>{e.preventDefault(); 
         props.formSubmit();
-        console.log('something happend')}}>
+        props.history();
+        }}>
         {/* inputs wil be onChange */}
             <input onChange={(e) => {
                 props.guessInput(e.target.value)
