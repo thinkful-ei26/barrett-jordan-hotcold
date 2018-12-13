@@ -10,7 +10,7 @@ class Game extends Component {
         super(props);
         this.state = {
             count: 0,
-            currentGuess: 0,
+            currentGuess: '',
             recentGuesses: [3, 12, 17, 14, 94],
             currentFeedback: 'hot',
             // currentSolution: ''
@@ -19,19 +19,35 @@ class Game extends Component {
 //inject data and see what's changing
     handleFormSubmit(){
         this.setState({
-            count: '',
-            currentGuess: '',
+            count: this.state.count + 1, 
             recentGuesses: [],
             currentFeedback: 'cold'
         })
-        console.log('im listening!!!')
     };
+
+    handleCurrentGuess(e){
+        this.setState({
+            currentGuess: e
+        })
+    }
+
+    // handleCurrentCount(){
+    //     if (this.state.currentGuess) {
+    //         this.setState({
+    //             count: this.state.count++ 
+    //         })
+    //     }
+    // }
     
     render() {
         return (
             <div>
                 <Header />
-                <GuessSection feedback={this.state.currentFeedback} formSubmit={(e) => this.handleFormSubmit(e)}/>
+                <GuessSection 
+                    feedback={this.state.currentFeedback} 
+                    formSubmit={(e) => this.handleFormSubmit(e)}
+                    guessInput={(e) => this.handleCurrentGuess(e)}
+                    />
                 <GuessCount count={this.state.count} />
                 <GuessList guesses={this.state.recentGuesses} />
             </div>
